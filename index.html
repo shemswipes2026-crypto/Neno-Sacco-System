@@ -3,27 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neno Sacco Booking Management System</title>
+    <title>Neno Sacco Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-    <h1>Welcome to Neno Sacco Booking Management System</h1>
-    <p>This is a fully functional booking management system for the Neno Sacco.</p>
-    <h2>Features</h2>
-    <ul>
-        <li>User Registration</li>
-        <li>Loan Management</li>
-        <li>Payment Processing</li>
-        <li>Report Generation</li>
-    </ul>
-    <h2>Login</h2>
-    <form action="/login" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <br>
-        <button type="submit">Login</button>
-    </form>
+    <div class="dashboard">
+        <nav class="tabs">
+            <button class="tab-button" data-tab="customer">Customer</button>
+            <button class="tab-button" data-tab="attendant">Attendant</button>
+            <button class="tab-button" data-tab="admin">Admin</button>
+        </nav>
+        <div class="tab-content">
+            <div id="customer" class="tab active">
+                <h1>Customer Dashboard</h1>
+                <div class="kpi-card">Total Bookings: <span id="total-bookings">0</span></div>
+                <table id="booking-table">
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Customer Name</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="booking-body">
+                    </tbody>
+                </table>
+                <button id="reset-demo-data">Reset Demo Data</button>
+            </div>
+            <div id="attendant" class="tab">
+                <h1>Attendant Booking Management</h1>
+                <form id="new-booking-form">
+                    <input type="text" id="customer-name" placeholder="Customer Name" required>
+                    <button type="submit">Add Booking</button>
+                </form>
+            </div>
+            <div id="admin" class="tab">
+                <h1>Admin Analytics</h1>
+                <div class="kpi-card">Total Revenue: <span id="total-revenue">$0</span></div>
+                <button id="export-csv">Export to CSV</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
