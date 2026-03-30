@@ -3,55 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo Dashboard</title>
+    <title>Neno Sacco System</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        nav { background: #333; padding: 1rem; }
-        nav a { color: #fff; padding: 1rem; text-decoration: none; }
-        .content { padding: 2rem; }
-        .tab { display: none; }
-        .active { display: block; }
+        body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        h1 { color: #333; }
+        .grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; width: 100%; max-width: 1200px; }
+        .kpi-card { border: 1px solid #ccc; border-radius: 5px; padding: 20px; text-align: center; }
+        form { margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        .button { background-color: #28a745; color: white; border: none; padding: 10px 20px; cursor: pointer; }
+        .button:hover { background-color: #218838; }
     </style>
 </head>
 <body>
+    <h1>Neno Sacco System</h1>
 
-<nav>
-    <a href="#" onclick="showTab('customer')">Customer</a>
-    <a href="#" onclick="showTab('attendant')">Attendant</a>
-    <a href="#" onclick="showTab('admin')">Admin</a>
-</nav>
-
-<div class="content">
-    <div id="customer" class="tab active">
-        <h2>Customer Dashboard</h2>
-        <p>Welcome to the Customer Dashboard.</p>
-        <!-- Add Customer functionality here -->
+    <div class="grid-container">
+        <div class="kpi-card">
+            <h2>Total Bookings</h2>
+            <p id="totalBookings">0</p>
+        </div>
+        <div class="kpi-card">
+            <h2>Total Revenue</h2>
+            <p id="totalRevenue">$0</p>
+        </div>
+        <div class="kpi-card">
+            <h2>Passengers Boarded</h2>
+            <p id="totalPassengers">0</p>
+        </div>
     </div>
-    
-    <div id="attendant" class="tab">
-        <h2>Attendant Dashboard</h2>
-        <p>Welcome to the Attendant Dashboard.</p>
-        <!-- Add Attendant functionality here -->
-    </div>
-    
-    <div id="admin" class="tab">
-        <h2>Admin Dashboard</h2>
-        <p>Welcome to the Admin Dashboard.</p>
-        <!-- Add Admin functionality here -->
-    </div>
-</div>
 
-<script>
-    function showTab(tabId) {
-        const tabs = document.querySelectorAll('.tab');
-        tabs.forEach(tab => {
-            tab.classList.remove('active');
-        });
-        document.getElementById(tabId).classList.add('active');
-    }
-    // Initialize to show customer tab
-    showTab('customer');
-</script>
+    <h2>Customer Booking Form</h2>
+    <form id="bookingForm">
+        <label for="route">Select Route:</label>
+        <select id="route" required>
+            <option value="Route 1">Route 1</option>
+            <option value="Route 2">Route 2</option>
+            <option value="Route 3">Route 3</option>
+        </select>
+        <label for="seats">Number of Seats:</label>
+        <input type="number" id="seats" required min="1" max="10">
+        <button type="submit" class="button">Book Now</button>
+        <button type="button" class="button" id="resetDemo">Reset Demo Data</button>
+    </form>
 
+    <h2>Passenger Manifest</h2>
+    <table id="passengerTable">
+        <thead>
+            <tr>
+                <th>Route</th>
+                <th>Seats</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <button class="button" id="exportCSV">Export to CSV</button>
+
+    <script>
+        let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+
+        // Update UI
+        function updateUI() {
+            const totalBookings = bookings.length;
+            const totalRevenue = bookings.reduce((sum, booking) => sum + booking.price, 0);
+            const totalPassengers = bookings.filter(booking => booking.status === 'Boarded').length;
+            document.getElementById('totalBookings').innerText = totalBookings;
+            document.getElementById('totalRevenue').innerText = `$${totalRevenue}`;
+            document.getElementById('totalPassengers').innerText = totalPassengers;
+            renderPassengerTable();
+        }
+
+        // Render passenger table
+        function renderPassengerTable() {
+            const tbody = document.querySelector('#passengerTable tbody');
+            tbody.innerHTML = '';
+            bookings.forEach(booking => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${booking.route}</td><td>${booking.seats}</td><td>${booking.status}</td>`;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Handle form submission
+        document.getElementById('bookingForm').onsubmit = function (e) {
+            e.preventDefault();
+            const route = document.getElementById('route').value;
+            const seats = parseInt(document.getElementById('seats').value);
+            const booking = { route, seats, price: seats * 10, status: 'Booked' };
+            bookings.push(booking);
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+            updateUI();
+            this.reset();
+        };
+
+        // Reset demo data
+        document.getElementById('resetDemo').onclick = function () {
+            localStorage.removeItem('bookings');
+            bookings = [];
+            updateUI();
+        };
+
+        // Export to CSV
+        document.getElementById('exportCSV').onclick = function () {
+            const csvContent = 'data:text/csv;charset=utf-8,';
+            bookings.forEach(booking => {
+                const row = `${booking.route},${booking.seats},${booking.status}`;
+                csvContent += row + '\n';
+            });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', 'bookings.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        updateUI();
+    </script>
 </body>
 </html>
