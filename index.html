@@ -3,47 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neno Sacco Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
+    <title>Demo Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        nav { background: #333; padding: 1rem; }
+        nav a { color: #fff; padding: 1rem; text-decoration: none; }
+        .content { padding: 2rem; }
+        .tab { display: none; }
+        .active { display: block; }
+    </style>
 </head>
 <body>
-    <div class="dashboard">
-        <nav class="tabs">
-            <button class="tab-button" data-tab="customer">Customer</button>
-            <button class="tab-button" data-tab="attendant">Attendant</button>
-            <button class="tab-button" data-tab="admin">Admin</button>
-        </nav>
-        <div class="tab-content">
-            <div id="customer" class="tab active">
-                <h1>Customer Dashboard</h1>
-                <div class="kpi-card">Total Bookings: <span id="total-bookings">0</span></div>
-                <table id="booking-table">
-                    <thead>
-                        <tr>
-                            <th>Booking ID</th>
-                            <th>Customer Name</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="booking-body">
-                    </tbody>
-                </table>
-                <button id="reset-demo-data">Reset Demo Data</button>
-            </div>
-            <div id="attendant" class="tab">
-                <h1>Attendant Booking Management</h1>
-                <form id="new-booking-form">
-                    <input type="text" id="customer-name" placeholder="Customer Name" required>
-                    <button type="submit">Add Booking</button>
-                </form>
-            </div>
-            <div id="admin" class="tab">
-                <h1>Admin Analytics</h1>
-                <div class="kpi-card">Total Revenue: <span id="total-revenue">$0</span></div>
-                <button id="export-csv">Export to CSV</button>
-            </div>
-        </div>
+
+<nav>
+    <a href="#" onclick="showTab('customer')">Customer</a>
+    <a href="#" onclick="showTab('attendant')">Attendant</a>
+    <a href="#" onclick="showTab('admin')">Admin</a>
+</nav>
+
+<div class="content">
+    <div id="customer" class="tab active">
+        <h2>Customer Dashboard</h2>
+        <p>Welcome to the Customer Dashboard.</p>
+        <!-- Add Customer functionality here -->
     </div>
+    
+    <div id="attendant" class="tab">
+        <h2>Attendant Dashboard</h2>
+        <p>Welcome to the Attendant Dashboard.</p>
+        <!-- Add Attendant functionality here -->
+    </div>
+    
+    <div id="admin" class="tab">
+        <h2>Admin Dashboard</h2>
+        <p>Welcome to the Admin Dashboard.</p>
+        <!-- Add Admin functionality here -->
+    </div>
+</div>
+
+<script>
+    function showTab(tabId) {
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.getElementById(tabId).classList.add('active');
+    }
+    // Initialize to show customer tab
+    showTab('customer');
+</script>
+
 </body>
 </html>
