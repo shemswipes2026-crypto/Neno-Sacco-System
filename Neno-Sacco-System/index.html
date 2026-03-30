@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        nav { background: #333; color: #fff; padding: 1em; }
+        nav a { color: #fff; margin: 0 1em; text-decoration: none; }
+        .container { padding: 2em; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="#customer">Customer Tab</a>
+    <a href="#admin" class="admin-tab hidden">Admin Tab</a>
+</nav>
+
+<div class="container">
+    <h1>Welcome to the Demo Dashboard</h1>
+    <div id="customer" class="tab"> 
+        <h2>Customer Attendant Section</h2>
+        <p>This is the customer attendant view.</p>
+    </div>
+    <div id="admin" class="tab hidden"> 
+        <h2>Admin Section</h2>
+        <p>This is the admin view.</p>
+    </div>
+</div>
+
+<script>
+    // Simulate auto-authentication
+    var userRole = "admin"; // can be "customer" or "admin"
+
+    // Function to show/hide tabs based on role
+    function loadDashboard() {
+        if (userRole === "admin") {
+            document.querySelector('.admin-tab').classList.remove('hidden');
+            document.getElementById('admin').classList.remove('hidden');
+        } else {
+            document.getElementById('customer').classList.remove('hidden');
+        }
+    }
+    
+    window.onload = loadDashboard;
+</script>
+
+</body>
+</html>
